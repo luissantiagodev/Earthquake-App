@@ -54,13 +54,7 @@ public class QueryUtils {
                 String place = properties.getString("place");
                 long time = properties.getLong("time");
 
-
-                // TODO: Convert unix time into the traditional format
-                Date dateObject = new Date(time);
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM DD, yyyy");
-                String dateToDisplay = dateFormatter.format(dateObject);
-
-                Earthquake earthquakeObject = new Earthquake(magnitude, place, dateToDisplay);
+                Earthquake earthquakeObject = new Earthquake(magnitude, place, time);
                 earthquakesList.add(earthquakeObject);
 
             }
