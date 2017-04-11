@@ -1,6 +1,8 @@
 package io.luis_santiago.earthquake_app.tool;
 
 import android.app.Activity;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,9 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import io.luis_santiago.earthquake_app.R;
+import android.graphics.drawable.GradientDrawable;
 
+import static android.os.Build.VERSION_CODES.M;
 import static io.luis_santiago.earthquake_app.R.id.city;
 import static io.luis_santiago.earthquake_app.R.id.date;
 
@@ -26,6 +30,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
     private String part1;
     private String part2;
+    GradientDrawable gradient;
 
     public EarthquakeAdapter(Activity context, ArrayList <Earthquake> earthquake){
 
@@ -89,6 +94,14 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         String timeFormat = formatTime(dateObject);
         time.setText(timeFormat);
 
+
+        // Set the proper background color on the magnitude circle.
+        // Fetch the background from the TextView, which is a GradientDrawable.
+        gradient = (GradientDrawable) magnitude.getBackground();
+
+        double magnitudeColor =  (earthquake.getMagnitude_earthquake());
+        getMagnitudeColor(magnitudeColor);
+
         return listItemView;
     }
 
@@ -108,5 +121,68 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         String output = decimalFormat.format(mag);
         return output;
+    }
+
+    private void getMagnitudeColor (double d){
+        int i = (int) Math.round(d);
+        switch (i){
+            case 0:
+            case 1:{
+                int color = ContextCompat.getColor(getContext(),R.color.magnitude1);
+                gradient.setColor(color);
+                Log.e ("Numero redondeado",  d+ "numero despues"+i);
+                break;
+            }
+            case 2:{
+                int color = ContextCompat.getColor(getContext(),R.color.magnitude2);
+                gradient.setColor(color);
+                Log.e ("Numero redondeado",  d+ "numero despues"+i);
+                break;
+            }
+            case 3:{
+                int color = ContextCompat.getColor(getContext(),R.color.magnitude3);
+                gradient.setColor(color);
+                Log.e ("Numero redondeado",  d+ "numero despues"+i);
+                break;
+            }
+            case 4:{
+                int color = ContextCompat.getColor(getContext(),R.color.magnitude4);
+                gradient.setColor(color);
+                Log.e ("Numero redondeado",  d+ "numero despues"+i);
+                break;
+            }
+            case 5:{
+                int color = ContextCompat.getColor(getContext(),R.color.magnitude5);
+                gradient.setColor(color);
+                Log.e ("Numero redondeado",  d+ "numero despues"+i);
+                break;
+            }
+            case 6:{
+                int color = ContextCompat.getColor(getContext(),R.color.magnitude6);
+                gradient.setColor(color);
+                Log.e ("Numero redondeado", d+ "numero despues"+i);
+                break;
+            }
+
+            case 7:{
+                int color = ContextCompat.getColor(getContext(),R.color.magnitude7);
+                gradient.setColor(color);
+                Log.e ("Numero redondeado", d+ "numero despues"+i);
+                break;
+            }
+            case 8:{
+                int color = ContextCompat.getColor(getContext(),R.color.magnitude8);
+                gradient.setColor(color);
+                Log.e ("Numero redondeado", d+ "numero despues"+i);
+                break;
+            }
+            case 9:{
+                int color = ContextCompat.getColor(getContext(),R.color.magnitude9);
+                gradient.setColor(color);
+                Log.e ("Numero redondeado", d+ "numero despues"+i);
+                break;
+            }
+
+        }
     }
 }
