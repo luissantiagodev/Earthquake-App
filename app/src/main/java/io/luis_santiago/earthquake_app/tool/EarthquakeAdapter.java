@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import io.luis_santiago.earthquake_app.EarthquakeActivity;
 import io.luis_santiago.earthquake_app.R;
 
 import android.graphics.drawable.GradientDrawable;
@@ -35,7 +36,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     private String part2;
     private GradientDrawable gradient;
 
-    public EarthquakeAdapter(Activity context, ArrayList<Earthquake> earthquake) {
+    public EarthquakeAdapter(Context context, ArrayList<Earthquake> earthquake) {
         super(context, 0, earthquake);
     }
 

@@ -33,25 +33,24 @@ import static android.content.Intent.ACTION_VIEW;
 public class EarthquakeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
-    public static final String URL_QUERY = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2016-01-01&endtime=2016-01-31&minmag=6&limit=10";
+    public static final String URL_QUERY = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
-    Intent intent;
-    ArrayList <Earthquake> arrayList = new ArrayList<>();
+    ListView earthquakeListView;
+    ArrayList <Earthquake> carl = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_earthquake);
-        QueryUtils queryUtils = new QueryUtils();
-        queryUtils.execute();
 
-        final EarthquakeAdapter earthquakeSetupAdapter_m = new EarthquakeAdapter(this, arrayList);
 
 
         // Find a reference to the {@link ListView} in the layout
-        final ListView earthquakeListView = (ListView) findViewById(R.id.list);
+        earthquakeListView = (ListView) findViewById(R.id.list);
+        QueryUtils queryUtils = new QueryUtils();
+        queryUtils.execute();
 
-        earthquakeListView.setAdapter(earthquakeSetupAdapter_m);
+      /*
 
         //TODO: set up the correct url
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,20 +61,13 @@ public class EarthquakeActivity extends AppCompatActivity {
                 intent.setData(Uri.parse(earthquake.getUrl()));
                 startActivity(intent);
             }
-        });
-    }
-
-    private void updateUI(ArrayList <Earthquake> earthquake){
-       this.arrayList = earthquake;
+        }); */
     }
 
 
-    private class QueryUtils extends AsyncTask <String,Void,ArrayList>{
-
-
-
+    private class QueryUtils extends AsyncTask <String,Void,ArrayList<Earthquake>>{
         @Override
-        protected ArrayList doInBackground(String... urls) {
+        protected ArrayList <Earthquake> doInBackground(String... urls) {
             URL url = createUrl(URL_QUERY);
             String jsonResponse = "";
             try{
@@ -84,16 +76,20 @@ public class EarthquakeActivity extends AppCompatActivity {
             catch(IOException e){
                 Log.e(LOG_TAG, "There was an error making the request");
             }
-            ArrayList earthquake = extractEarthquakeData(jsonResponse);
-            return earthquake;
+
+            carl = extractEarthquakeData(jsonResponse);
+
+            return carl;
         }
 
         @Override
-        protected void onPostExecute(ArrayList arrayList) {
-            if(arrayList == null){
-                return;
+        protected void onPostExecute(ArrayList <Earthquake> arrayList) {
+
+            if(carl== null){
+                Log.e(LOG_TAG,"There was something wrong, list is null");
             }
-            updateUI(arrayList);
+            EarthquakeAdapter earthquakeAdapterm = new EarthquakeAdapter(EarthquakeActivity.this, carl);
+            earthquakeListView.setAdapter(earthquakeAdapterm);
         }
 
         private QueryUtils(){ // Private constructor so we cant create an instance
@@ -116,6 +112,7 @@ public class EarthquakeActivity extends AppCompatActivity {
             if (url==null) {
                 return jsonresponse;
             }
+
 
             HttpURLConnection urlConnection= null;
             InputStream inputStream = null;
@@ -160,7 +157,6 @@ public class EarthquakeActivity extends AppCompatActivity {
         }
 
         public ArrayList extractEarthquakeData (String earthquakeJSON){
-            ArrayList <Earthquake> arraylist  = new ArrayList<>();
             try {
                 JSONObject jsonRoot = new JSONObject(earthquakeJSON);
                 JSONArray feature = jsonRoot.getJSONArray("features");
@@ -175,14 +171,15 @@ public class EarthquakeActivity extends AppCompatActivity {
                     long time = properties.getLong("time");
                     String url = properties.getString("url");
 
+                    Log.e(LOG_TAG,place);
                     Earthquake earthquakeObject = new Earthquake(magnitude,place,time,url);
-                    arraylist.add(earthquakeObject);
+                    carl.add(earthquakeObject);
                 }
             }
             catch (JSONException e){
                 Log.e(LOG_TAG,"There was something wrong with the URL.");
             }
-            return arraylist;
+            return carl;
         }
     }
 
