@@ -37,7 +37,8 @@ public class EarthquakeActivity extends AppCompatActivity {
 
     ListView earthquakeListView;
     ArrayList <Earthquake> carl = new ArrayList<>();
-
+    Intent intent;
+    EarthquakeAdapter earthquakeAdapterm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,18 +51,18 @@ public class EarthquakeActivity extends AppCompatActivity {
         QueryUtils queryUtils = new QueryUtils();
         queryUtils.execute();
 
-      /*
+
 
         //TODO: set up the correct url
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Earthquake earthquake = earthquakeSetupAdapter_m.getItem(i);
+                Earthquake earthquake = earthquakeAdapterm.getItem(i);
                 intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(earthquake.getUrl()));
                 startActivity(intent);
             }
-        }); */
+        });
     }
 
 
@@ -88,7 +89,7 @@ public class EarthquakeActivity extends AppCompatActivity {
             if(carl== null){
                 Log.e(LOG_TAG,"There was something wrong, list is null");
             }
-            EarthquakeAdapter earthquakeAdapterm = new EarthquakeAdapter(EarthquakeActivity.this, carl);
+            earthquakeAdapterm = new EarthquakeAdapter(EarthquakeActivity.this, carl);
             earthquakeListView.setAdapter(earthquakeAdapterm);
         }
 
