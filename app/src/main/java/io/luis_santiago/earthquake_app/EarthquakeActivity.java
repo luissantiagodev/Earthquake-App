@@ -1,7 +1,11 @@
 package io.luis_santiago.earthquake_app;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -39,13 +43,19 @@ public class EarthquakeActivity extends AppCompatActivity implements android.app
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_earthquake);
-
-
-
-        // Find a reference to the {@link ListView} in the layout
         init();
-        LoaderManager loaderManager = getLoaderManager();
 
+        //TODO: verify if there's internet connection
+
+            if(thereIsInternet()){
+                progressBar.setVisibility(View.VISIBLE);
+            }
+            else if(!(thereIsInternet())){
+                progressBar.setVisibility(View.GONE);
+                noInternetConection.setText("There is no internet connection");
+            }
+        // Find a reference to the {@link ListView} in the layout
+        LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(EARTHQUAKE_LOADER, null, this);
 
         //TODO: set up the correct url
@@ -93,5 +103,13 @@ public class EarthquakeActivity extends AppCompatActivity implements android.app
         progressBar = (ProgressBar)findViewById(R.id.progressbar);
         earthquakeListView.setVisibility(View.GONE);
         noInternetConection.setVisibility(View.GONE);
+    }
+
+    public boolean thereIsInternet(){
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)EarthquakeActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activework  = connectivityManager.getActiveNetworkInfo();
+        boolean isConnected = activework!=null && activework.isConnected();
+        return isConnected;
     }
 }
