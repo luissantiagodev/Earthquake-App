@@ -25,6 +25,7 @@ import static io.luis_santiago.earthquake_app.EarthquakeActivity.URL_QUERY;
 
 public final class QueryUtils {
 
+        private static final String LOG_TAG_LOG= QueryUtils.class.getName();
     private QueryUtils() {
 
     }
@@ -37,11 +38,10 @@ public final class QueryUtils {
         try {
             jsonResponse = makeHttpRequest(curl);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "There was an error making the request");
+            Log.e(LOG_TAG_LOG, "There was an error making the request");
         }
         // global arraylist
         carl = extractEarthquakeData(jsonResponse);
-
         return carl;
     }
 

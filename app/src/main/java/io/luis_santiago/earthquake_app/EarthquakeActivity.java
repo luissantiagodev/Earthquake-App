@@ -10,10 +10,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import io.luis_santiago.earthquake_app.tool.Earthquake;
 import io.luis_santiago.earthquake_app.tool.EarthquakeAdapter;
 import io.luis_santiago.earthquake_app.tool.EarthquakeLoader;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class EarthquakeActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<ArrayList<Earthquake>> {
 
@@ -22,6 +29,8 @@ public class EarthquakeActivity extends AppCompatActivity implements android.app
     public static final String URL_QUERY = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
     ListView earthquakeListView;
+    TextView noInternetConection;
+    ProgressBar progressBar;
     public static ArrayList<Earthquake> carl = new ArrayList<>();
     Intent intent;
     EarthquakeAdapter earthquakeAdapterm;
@@ -31,9 +40,10 @@ public class EarthquakeActivity extends AppCompatActivity implements android.app
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_earthquake);
 
-        // Find a reference to the {@link ListView} in the layout
-        earthquakeListView = (ListView) findViewById(R.id.list);
 
+
+        // Find a reference to the {@link ListView} in the layout
+        init();
         LoaderManager loaderManager = getLoaderManager();
 
         loaderManager.initLoader(EARTHQUAKE_LOADER, null, this);
@@ -57,16 +67,31 @@ public class EarthquakeActivity extends AppCompatActivity implements android.app
 
     @Override
     public void onLoadFinished(android.content.Loader<ArrayList<Earthquake>> loader, ArrayList<Earthquake> earthquakes) {
-            if(carl!=null) {
+            if(earthquakes!=null && !(earthquakes.isEmpty())) {
+                earthquakeListView.setVisibility(View.VISIBLE);
+                Log.e(LOG_TAG,"The list was able to get on the content"+ earthquakes);
                 earthquakeAdapterm = new EarthquakeAdapter(this, earthquakes);
                 earthquakeListView.setAdapter(earthquakeAdapterm);
+                progressBar.setVisibility(View.GONE);
             }
-            else {
+            else if (earthquakes.isEmpty()) {
+                noInternetConection.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                Log.e(LOG_TAG,"There is no internet conection");
                 Log.e(LOG_TAG,"el array esta vacio");
             }
+
     }
     @Override
     public void onLoaderReset(android.content.Loader<ArrayList<Earthquake>> loader) {
         earthquakeAdapterm.clear();
+    }
+
+    public void init(){
+        earthquakeListView = (ListView) findViewById(R.id.list);
+        noInternetConection = (TextView)findViewById(R.id.no_internet_conection);
+        progressBar = (ProgressBar)findViewById(R.id.progressbar);
+        earthquakeListView.setVisibility(View.GONE);
+        noInternetConection.setVisibility(View.GONE);
     }
 }
