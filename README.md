@@ -1,4 +1,14 @@
 # Earthquake-App
+You cand find the highest range of earthquakes around the world!
+# Download the app!
+You can download the app in this Link: https://drive.google.com/open?id=0B09KcMeLlBtFSTdPMG9xNU1sNTA
+============
+![desktop hd](https://user-images.githubusercontent.com/21210652/29149724-a440fd08-7d3b-11e7-87e5-bff8903ebc28.png)
+============
+# Features
+* Find out the highest range of the earthquakes
+# Developed by 
+Luis Fernando Santiago Ruiz - luissantiagodev@gmail.com
 # License
    Copyright 2017 Luis Santiago
 
